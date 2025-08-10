@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator</title>
+  </head>
+  <body>
+    <div>
+      <h1>Welcome to javascript Calculator</h1>
+    </div>
+    <div>
+      X
+      <input type="text" placeholder="Enter first value" id="x">
+    </div>
+
+    <button onclick="
+    symbal = '+';
+    ">+</button>
+
+    <button onclick="
+    symbal = '-'; 
+    ">-</button>
+
+    <button onclick="
+    symbal = '*';
+    ">*</button>
+
+    <button onclick="
+    symbal = '/';
+    ">/</button>
+
+    <div>
+      Y
+      <input type="text" placeholder="Enter second value" id="y">
+    </div>
+
+    <button onclick="
+    Calculator(x, y, symbal);
+    ">
+      Result
+    </button>
+    <script>
+      let x = document.getElementById("x");
+      let y = document.getElementById("y");
+      let symbal;
+      console.log(x, y);
+      
+      function Calculator(x, y, symbal) {
+        num1 = Number(x.value);
+        num2 = Number(y.value);
+        if (isNaN(num1) || isNaN(num2)) {
+          alert("Enter only number");
+        }
+        else if (symbal === '+'){
+          console.log(num1 + num2);
+        } else if (symbal === '-'){
+          console.log(num1 - num2);
+        } else if(symbal === '*'){
+          console.log(num1 * num2);
+        } else if (symbal === '/'){
+          console.log(num1 / num2);
+        } else{
+          console.log('symbal is not defined');
+        }
+      }
+    </script>
+  </body>
+</html>
