@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Number Guessing Game</title>
+  </head>
+  <body>
+    <div>
+      <h1>Guess a Number between 1 to 100</h1>
+    </div>
+    <div>
+      Enter your Guess
+      <input type="number" id="userGuess"> 
+    </div>
+
+    <button onclick="
+    checkUserGuess(userGuess, displayText, compterGuess);
+    ">submit</button>
+    
+    <div id="text">
+    </div>
+    <script>
+      let userGuess = document.getElementById('userGuess');
+      let displayText = document.getElementById('text');
+      let compterGuess = Math.floor(Math.random() * 100);
+
+      function randomNumber(){
+        return Math.floor(Math.random() * 100);
+      }
+
+
+
+      function checkUserGuess (userGuess, displayText, compterGuess) {
+        let guess = Number(userGuess.value);
+
+        if(guess === compterGuess){
+          displayText.innerHTML =  "You Win";
+        }else if (guess < compterGuess) {
+          displayText.innerHTML =  "too low";
+        }else if(guess > compterGuess){
+         displayText.innerHTML =  "too high";
+        }else {
+          displayText.innerHTML =  "logical Error";
+        }
+        
+        console.log(compterGuess);
+        console.log(guess);
+      }
+    </script>
+  </body>
+</html>
