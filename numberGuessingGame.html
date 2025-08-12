@@ -15,24 +15,29 @@
     <button onclick="
     checkUserGuess(userGuess, displayText, compterGuess);
     ">submit</button>
+
+    <button onclick="
+    displayText.innerHTML = ''; 
+    compterGuess = randomNumber();">
+      New Game
+    </button>
     
     <div id="text">
     </div>
     <script>
-      let userGuess = document.getElementById('userGuess');
-      let displayText = document.getElementById('text');
-      let compterGuess = Math.floor(Math.random() * 100);
-
       function randomNumber(){
         return Math.floor(Math.random() * 100);
       }
 
-
+      let userGuess = document.getElementById('userGuess');
+      let displayText = document.getElementById('text');
+      let compterGuess = randomNumber();
 
       function checkUserGuess (userGuess, displayText, compterGuess) {
         let guess = Number(userGuess.value);
 
         if(guess === compterGuess){
+          randomNumber();
           displayText.innerHTML =  "You Win";
         }else if (guess < compterGuess) {
           displayText.innerHTML =  "too low";
@@ -41,9 +46,6 @@
         }else {
           displayText.innerHTML =  "logical Error";
         }
-        
-        console.log(compterGuess);
-        console.log(guess);
       }
     </script>
   </body>
