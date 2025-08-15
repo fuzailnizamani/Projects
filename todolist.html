@@ -8,15 +8,46 @@
       <h1> To-DO List</h1>
       <div class="input-section">
         <input type="text" placeholder="Add a new task..." id="taskInput">
-        <button class="addTaskBtn">Add</button>
+        <button class="addTaskBtn" onclick=" addTask();">Add</button>
       </div>
       <ul id="taskList">
         <!-- Task will be add here dynamically -->
       </ul>
     </div>
-
     <script>
-      
+      let tasklist = document.getElementById("taskList");
+      let taskInput = document.getElementById("taskInput");
+      let counter = 0;
+      let tasks = [];
+
+      function addTask(){
+        let inputCheck = document.createElement('input');
+        let li = document.createElement('li');
+        let button = document.createElement('button');
+        let br = document.createElement('br');
+        let span = document.createElement('span');
+        span.textContent = taskInput.value;
+        inputCheck.type = "checkbox";
+        button.id = 'removeBtn-' + counter;
+        button.textContent = "Remove";
+        li.id = "listitems-" + counter;
+        li.appendChild(inputCheck);
+        li.appendChild(span);
+        li.appendChild(button);
+        tasklist.appendChild(li);
+        tasklist.appendChild(br);
+        document.getElementById('removeBtn-' + counter).addEventListener('click', (event) => {
+          let listItem = document.getElementById("listItem-" + counter);
+          console.log(listItem);
+          console.log(event);
+          console.log(counter);
+          if (listItem){
+            listItem.remove();
+          }
+        })
+        console.log(counter);
+        counter++;
+      }
     </script>
   </body>
 </html>
