@@ -26,7 +26,12 @@
         let button = document.createElement('button');
         let br = document.createElement('br');
         let span = document.createElement('span');
-        span.textContent = taskInput.value;
+        const text = taskInput.value.trim();
+        if(!text){
+          alert("Enter task");
+          return;
+        }
+        span.textContent = text;
         inputCheck.type = "checkbox";
         button.id = 'removeBtn-' + counter;
         button.textContent = "Remove";
@@ -36,16 +41,7 @@
         li.appendChild(button);
         tasklist.appendChild(li);
         tasklist.appendChild(br);
-        document.getElementById('removeBtn-' + counter).addEventListener('click', (event) => {
-          let listItem = document.getElementById("listItem-" + counter);
-          console.log(listItem);
-          console.log(event);
-          console.log(counter);
-          if (listItem){
-            listItem.remove();
-          }
-        })
-        console.log(counter);
+        tasks.push({id:`listitems-${counter}`, text: taskInput.value, completed: inputCheck.checked, removeButtonID: `removeBtn-${counter}`});
         counter++;
       }
     </script>
