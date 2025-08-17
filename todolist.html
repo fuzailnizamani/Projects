@@ -9,6 +9,12 @@
       <div class="input-section">
         <input type="text" placeholder="Add a new task..." id="taskInput">
         <button class="addTaskBtn" onclick=" addTask();">Add</button>
+        <style>
+          .completed span {
+            text-decoration: line-through;
+            opacity: 0.7;
+          }
+        </style>
       </div>
       <ul id="taskList">
         <!-- Task will be add here dynamically -->
@@ -19,6 +25,15 @@
       let taskInput = document.getElementById("taskInput");
       let counter = 0;
       let tasks = [];
+      window.onload = function() {
+        const saveTasks = JSON.parse(localStorage.getItem("Tasks")) || []; 
+        tasks = saveTasks;
+        tasks.forEach(task => renderTask(task));
+      }
+
+      function renderTask(task){
+        console.log(task);
+      }
 
       function addTask(){
         let inputCheck = document.createElement('input');
@@ -26,22 +41,50 @@
         let button = document.createElement('button');
         let br = document.createElement('br');
         let span = document.createElement('span');
+
         const text = taskInput.value.trim();
         if(!text){
           alert("Enter task");
           return;
         }
+
         span.textContent = text;
         inputCheck.type = "checkbox";
-        button.id = 'removeBtn-' + counter;
         button.textContent = "Remove";
+
+        button.addEventListener('click', (event) => {
+          const lastIndex = li.id.match(/\d+$/)[0];
+
+          for(let i = 0; i < tasks.length ; i++){
+            if(tasks[i].id === li.id){
+              tasks.splice(i,1);
+              localStorage.setItem("Tasks", JSON.stringify(tasks));
+            }
+          }
+          
+        const nextLine = document.getElementById('nextLine-' + lastIndex);
+          nextLine.remove();
+          li.remove();
+        })
+
+        inputCheck.addEventListener('change', (event) => {
+          li.classList.toggle('completed', inputCheck.checked);
+          const index = tasks.findIndex(t => t.id === li.id);
+          tasks[index].completed = inputCheck.checked;
+          localStorage.setItem("Tasks", JSON.stringify(tasks));
+        })
+
+        taskInput.value = "";
+        button.id = 'removeBtn-' + counter;
         li.id = "listitems-" + counter;
         li.appendChild(inputCheck);
         li.appendChild(span);
         li.appendChild(button);
+        br.id = 'nextLine-' + counter;
         tasklist.appendChild(li);
         tasklist.appendChild(br);
         tasks.push({id:`listitems-${counter}`, text: taskInput.value, completed: inputCheck.checked, removeButtonID: `removeBtn-${counter}`});
+        localStorage.setItem("Tasks", JSON.stringify(tasks));
         counter++;
       }
     </script>
