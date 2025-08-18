@@ -28,10 +28,57 @@
       window.onload = function() {
         const saveTasks = JSON.parse(localStorage.getItem("Tasks")) || []; 
         tasks = saveTasks;
+        counter = Math.max(...tasks.map(t => parseInt(Number(t.id.match(/\d+$/)[0])))) + 1;
         tasks.forEach(task => renderTask(task));
       }
 
       function renderTask(task){
+        let inputCheck = document.createElement('input');
+        let li = document.createElement('li');
+        let button = document.createElement('button');
+        let br = document.createElement('br');
+        let span = document.createElement('span');
+
+        span.textContent = task.text;
+        inputCheck.type = "checkbox";
+        button.textContent = "Remove";
+
+        button.addEventListener('click', (event) => {
+          const lastIndex = li.id.match(/\d+$/)[0];
+
+          for(let i = 0; i < tasks.length ; i++){
+            if(tasks[i].id === li.id){
+              tasks.splice(i,1);
+              localStorage.setItem("Tasks", JSON.stringify(tasks));
+            }
+          }
+          
+        const nextLine = document.getElementById('nextLine-' + lastIndex);
+          nextLine.remove();
+          li.remove();
+        });
+
+        inputCheck.addEventListener('change', (event) => {
+          li.classList.toggle('completed', inputCheck.checked);
+          const index = tasks.findIndex(t => t.id === li.id);
+          tasks[index].completed = inputCheck.checked;
+          console.log(tasks[index].completed);
+          localStorage.setItem("Tasks", JSON.stringify(tasks));
+        });
+        
+        inputCheck.checked = task.completed;
+        li.id = task.id;
+        button.id = task.removeButtonID;
+        br.id = task.brId;
+        li.classList.toggle('completed', inputCheck.checked);
+
+        li.appendChild(inputCheck);
+        li.appendChild(span);
+        li.appendChild(button);
+
+        tasklist.appendChild(li);
+        tasklist.appendChild(br);
+        
         console.log(task);
       }
 
@@ -71,9 +118,11 @@
           li.classList.toggle('completed', inputCheck.checked);
           const index = tasks.findIndex(t => t.id === li.id);
           tasks[index].completed = inputCheck.checked;
+          console.log(tasks[index].completed);
           localStorage.setItem("Tasks", JSON.stringify(tasks));
         })
 
+        
         taskInput.value = "";
         button.id = 'removeBtn-' + counter;
         li.id = "listitems-" + counter;
@@ -83,7 +132,9 @@
         br.id = 'nextLine-' + counter;
         tasklist.appendChild(li);
         tasklist.appendChild(br);
-        tasks.push({id:`listitems-${counter}`, text: taskInput.value, completed: inputCheck.checked, removeButtonID: `removeBtn-${counter}`});
+
+        tasks.push({id:`listitems-${counter}`, text: text, completed: inputCheck.checked, removeButtonID: `removeBtn-${counter}`, brId: br.id});
+
         localStorage.setItem("Tasks", JSON.stringify(tasks));
         counter++;
       }
