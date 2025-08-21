@@ -1,0 +1,85 @@
+let tasklist = document.getElementById("taskList");
+let taskInput = document.getElementById("taskInput");
+let counter = 0;
+let tasks = [];
+
+window.onload = function() {
+  const saveTasks = JSON.parse(localStorage.getItem("Tasks")) || []; 
+  tasks = saveTasks;
+  let numbers = tasks.map(t => {
+    const m = t.id && t.id.match(/\d+$/);
+    return m ? parseInt(m[0], 10): null ;
+}).filter(n => n !== null);
+
+  counter = numbers.length > 0 ? Math.max(...numbers) + 1 : 0;
+  tasks.forEach(task => buildTaskElement(task));
+}
+
+function buildTaskElement(task) {
+    let inputCheck = document.createElement('input');
+    let li = document.createElement('li');
+    let button = document.createElement('button');
+    let br = document.createElement('br');
+    let span = document.createElement('span');
+
+    span.textContent = task.text;
+    inputCheck.type = "checkbox";
+    inputCheck.checked = task.completed;
+    li.id = task.id;
+    button.id = task.removeButtonID;
+    br.id = task.brId;
+    button.textContent = "Remove";
+
+    li.classList.toggle('completed', inputCheck.checked);
+
+    button.addEventListener('click', (event) => {
+    const lastIndex = li.id.match(/\d+$/)[0];
+
+    for(let i = 0; i < tasks.length ; i++){
+      if(tasks[i].id === li.id){
+        tasks.splice(i,1);
+        localStorage.setItem("Tasks", JSON.stringify(tasks));
+      }
+    }
+    
+    const nextLine = document.getElementById('nextLine-' + lastIndex);
+    nextLine.remove();
+    li.remove();
+  })
+
+    inputCheck.addEventListener('change', (event) => {
+    li.classList.toggle('completed', inputCheck.checked);
+    const index = tasks.findIndex(t => t.id === li.id);
+    tasks[index].completed = inputCheck.checked;
+    localStorage.setItem("Tasks", JSON.stringify(tasks));
+  })
+
+  
+  li.appendChild(inputCheck);
+  li.appendChild(span);
+  li.appendChild(button);
+  tasklist.appendChild(li);
+  tasklist.appendChild(br);
+}
+
+function addTask(){
+  const text = taskInput.value.trim();
+  if(!text){
+    alert("Enter task");
+    return;
+  }
+
+  const task = {
+    id: `listitems-${counter}`,
+    text: text,
+    completed: false,
+    removeButtonID: `removeBtn-${counter}`,
+    brId: `nextLine-${counter}`
+  };
+
+  tasks.push(task);
+  localStorage.setItem("Tasks", JSON.stringify(tasks));
+  buildTaskElement(task);
+  counter++;
+  taskInput.value = "";
+}
